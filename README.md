@@ -2,58 +2,49 @@
 
 ## Overview
 
-This project analyzes online retail transaction data to identify distinct customer groups and translate purchasing behavior into practical marketing actions. Recency, Frequency, and Monetary (RFM) features were created at the customer level, followed by a comparison of K-Means and hierarchical clustering.
+This project uses RFM analysis and clustering to identify customer groups and support targeted marketing and retention strategies.
 
 ## Data
 
-The analysis uses an online retail dataset containing transactions across 37 countries.
+The analysis uses the UCI Online Retail dataset:
 
-- 541,909 original transaction records
+- 541,909 transaction records
 - 392,692 records retained after cleaning
 - 4,338 customers
-- 18,532 invoices
 - 3,665 products
-- £8.89 million in total revenue
+- 18,532 invoices
+- 37 countries
+- £8.89 million in revenue
 
 ## Data Preparation
 
-The preparation process included:
-
-- Removing cancelled orders, missing customer IDs, invalid quantities, and non-positive prices
-- Converting transaction dates and calculating line-level revenue
-- Aggregating transactions by customer
-- Creating Recency, Frequency, and Monetary features
-- Applying log transformation and standardization before clustering
+- Converted invoice dates and created transaction-level revenue
+- Removed cancellations, duplicate records, missing customer IDs, and non-positive quantities or prices
+- Engineered Recency, Frequency, and Monetary features for each customer
+- Standardized the RFM features before clustering
 
 ## Methodology
 
-Two clustering approaches were evaluated:
+K-Means and hierarchical clustering were compared using silhouette and Davies–Bouldin scores. K-Means hyperparameters were also tested across initialization methods and iteration limits.
 
-1. **K-Means clustering**
-2. **Hierarchical clustering**
+The final model used:
 
-The number of clusters was selected using cluster validation metrics and business interpretability. K-Means was also tested across different initialization methods and iteration limits.
+- 5 clusters
+- K-Means++ initialization
+- 10 initializations
+- 100 maximum iterations
+- Random state of 42
 
 ## Key Results
 
-A five-cluster K-Means solution produced the strongest overall performance:
+| Model | Silhouette Score | Davies–Bouldin Index |
+|---|---:|---:|
+| K-Means | 0.617 | 0.716 |
+| Hierarchical clustering | 0.609 | 0.742 |
 
-- Silhouette score: **0.617**
-- Davies-Bouldin index: **0.716**
-- Hierarchical clustering silhouette score: **0.609**
-- Hierarchical clustering Davies-Bouldin index: **0.742**
+K-Means produced the stronger separation, identifying five customer segments:
 
-The final K-Means model used:
-
-- Number of clusters: 5
-- Initialization: k-means++
-- Maximum iterations: 100
-- Number of initializations: 10
-- Random state: 42
-
-## Customer Segments
-
-| Segment | Customers | Average Recency | Average Frequency | Average Monetary Value |
+| Segment | Customers | Average Recency | Average Frequency | Average Spend |
 |---|---:|---:|---:|---:|
 | Balanced Customers | 3,048 | 43.9 days | 3.7 purchases | £1,333 |
 | Lost Customers | 1,063 | 248.5 days | 1.6 purchases | £479 |
@@ -64,22 +55,15 @@ The final K-Means model used:
 ## Business Recommendations
 
 - Offer product bundles and loyalty incentives to balanced customers
-- Use targeted discounts and reactivation campaigns for lost customers
-- Assign personalized account support to high-value VIP customers
-- Provide exclusive loyalty rewards to frequent big spenders
-- Develop invitation-only shopping experiences for top-tier champions
+- Use reactivation discounts for customers who have not purchased recently
+- Assign personal account support to high-value customers
+- Develop loyalty rewards for frequent, high-spending customers
+- Offer exclusive shopping events to top-tier customers
 
 ## Technologies
 
-- Python
-- PySpark
-- pandas
-- scikit-learn
-- SciPy
-- Matplotlib
-- Seaborn
+Python, Pandas, NumPy, Scikit-learn, SciPy, Matplotlib, Seaborn
 
 ## Repository Contents
 
-- `rfm_customer_segmentation.ipynb`: data preparation, exploratory analysis, clustering, evaluation, and segment profiling
-- `customer_segmentation_report.pdf`: full project report
+- `rfm_customer_segmentation.ipynb`: data cleaning, exploratory analysis, RFM feature engineering, model comparison, customer segmentation, and visualizations
